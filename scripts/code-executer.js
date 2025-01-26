@@ -1,21 +1,20 @@
 const { exec } = require("child_process");
 
-const executeSyntax = {
+const _executeSyntax = {
   python: "python",
   golang: "go run",
 };
 
 const executeCodeFile = async (language, path) => {
-  let result = await exec(
-    executeSyntax[language] + " " + path,
+  const result = await exec(
+    _executeSyntax[language] + " " + path,
     (ReqError, output, error) => {
       if (ReqError) {
-        console.log(ReqError);
-        return;
+        return ReqError;
       }
     }
   );
-  return result.stdout.toArray();
+  return result;
 };
 
 module.exports = executeCodeFile;

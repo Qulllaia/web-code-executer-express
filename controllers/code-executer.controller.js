@@ -3,13 +3,16 @@ const fileExecuter = require("../scripts/code-executer");
 
 class CodeExecuterController {
   async getCode(req, res) {
-    const { language, script } = req.body;
-    const result = await fileWriter(script, language).then((executeData) => {
-      return fileExecuter(...executeData);
-    });
+    const { userId, language, script } = req.body;
+    let { stdout, stderr } = await fileWriter(userId, script, language).then(
+      (executeData) => {
+        return fileExecuter(...executeData);
+      }
+    );
     res.status(200).send({
       status: "Code done succesfully",
-      output: result,
+      output: await stdout.toArray(),
+      error: [],
     });
   }
 }
